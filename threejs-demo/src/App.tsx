@@ -1,13 +1,11 @@
-import { useState } from 'react'
-import './App.css'
-// import ThreeDemo from './pages/ThreeDemo'
-import TestDemo from './pages/TestDemo'
+import { useState } from "react"
+import "./App.css"
+import GLTFLoader from "./pages/GLTFLoader"
 
 function App() {
     return (
         <div className="App">
-            {/* <ThreeDemo></ThreeDemo> */}
-            <TestDemo></TestDemo>
+            <GLTFLoader />
         </div>
     )
 }

@@ -3,10 +3,13 @@ import * as THREE from "three"
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js"
 
-function ThreeDemo() {
-    const domRef: any = useRef<HTMLCanvasElement>(null)
+const clock: THREE.Clock = new THREE.Clock()
+const mixers: Array<THREE.AnimationMixer> = []
 
-    const initLight = () => {
+function ThreeDemo() {
+    const domRef: any = useRef<HTMLDivElement>(null)
+
+    const initLight = (scene: any) => {
         const dirLight = new THREE.DirectionalLight(0xffffff)
         dirLight.position.set(3, 10, 10)
         dirLight.castShadow = true
@@ -16,15 +19,18 @@ function ThreeDemo() {
         dirLight.shadow.camera.right = 2
         dirLight.shadow.camera.near = 0.1
         dirLight.shadow.camera.far = 40
-        return dirLight
+        scene.add(dirLight)
     }
 
     const initModal = (scene: any) => {
         const loader = new GLTFLoader()
         loader.load("/rabbit.glb", function (gltf: any) {
-            const model = gltf.scene
+            const { scene: model, animations } = gltf
+
             scene.add(model)
-            console.log("======loader-----", gltf)
+
+            // adjust model scale
+            model.scale.set(4, 4, 4)
 
             model.traverse(function (object: any) {
                 if (object.isMesh) {
@@ -37,14 +43,24 @@ function ThreeDemo() {
             scene.add(skeleton)
 
             const mixer = new THREE.AnimationMixer(model)
-            const animations = gltf.animations
-
-            for (const animation of animations) {
+            mixers.push(mixer)
+            for (const clip of animations) {
+                // dance
+                const action = mixer.clipAction(clip)
+                action.play()
             }
         })
     }
 
-    const initCamera = () => {}
+    const initGround = (scene: any) => {
+        const mesh = new THREE.Mesh(
+            new THREE.PlaneGeometry(1000, 1000),
+            new THREE.MeshPhongMaterial({ color: 0x999999, depthWrite: false })
+        )
+        mesh.rotation.x = -Math.PI / 2
+        mesh.receiveShadow = true
+        scene.add(mesh)
+    }
 
     const onInit = () => {
         const domEle = domRef.current
@@ -54,32 +70,30 @@ function ThreeDemo() {
             45,
             domEle.clientWidth / domEle.clientHeight,
             1,
-            1000
+            50
         )
-        camera.position.set(-1, 2, 3)
+        camera.position.set(-1, 1, 1)
         camera.lookAt(0, 0, 0)
 
         // initLight
-        const light = initLight()
-        scene.add(light)
+        initLight(scene)
 
+        // load Modal
         initModal(scene)
 
-        const mesh = new THREE.Mesh(
-            new THREE.PlaneGeometry(100, 100),
-            new THREE.MeshPhongMaterial({ color: 0x999999, depthWrite: false })
-        )
-        mesh.rotation.x = -Math.PI / 2
-        mesh.receiveShadow = true
-        scene.add(mesh)
+        // ground
+        initGround(scene)
 
-        const renderer = new THREE.WebGLRenderer({ antialias: true, canvas: domEle })
+        scene.add(new THREE.AxesHelper(1))
+
+        // gl render
+        const renderer = new THREE.WebGLRenderer({ antialias: true })
         renderer.setSize(domEle.clientWidth, domEle.clientHeight)
         // 默认 LinearEncoding
         renderer.outputEncoding = THREE.sRGBEncoding
         //  阴影贴图
         renderer.shadowMap.enabled = true
-        // domEle.appendChild(renderer.domElement)
+        domEle.appendChild(renderer.domElement)
 
         const controls = new OrbitControls(camera, renderer.domElement)
         // controls.enablePan = false
@@ -90,8 +104,8 @@ function ThreeDemo() {
         function resizeRendererToDisplaySize(renderer: any) {
             const canvas = renderer.domElement
             const pixelRatio = window.devicePixelRatio
-            const width = (canvas.clientWidth * window.devicePixelRatio) | 0
-            const height = (canvas.clientHeight * window.devicePixelRatio) | 0
+            const width = (canvas.clientWidth * pixelRatio) | 0
+            const height = (canvas.clientHeight * pixelRatio) | 0
 
             const needResize = canvas.width !== width || canvas.height !== height
             if (needResize) {
@@ -101,6 +115,8 @@ function ThreeDemo() {
         }
 
         function animate() {
+            const mixUpdateDelta = clock.getDelta()
+            mixers.forEach(mixer => mixer.update(mixUpdateDelta))
             renderer.render(scene, camera)
 
             if (resizeRendererToDisplaySize(renderer)) {
@@ -108,16 +124,19 @@ function ThreeDemo() {
                 camera.aspect = canvas.clientWidth / canvas.clientHeight
                 camera.updateProjectionMatrix()
             }
-
             requestAnimationFrame(animate)
         }
 
         animate()
+
+        return () => {
+            domEle.removeChild(renderer.domElement)
+        }
     }
 
     useEffect(onInit, [])
 
-    return <canvas style={{ width: "100%", height: "100%" }} ref={domRef}></canvas>
+    return <div style={{ width: "100%", height: "100%" }} ref={domRef}></div>
 }
 
 export default ThreeDemo
