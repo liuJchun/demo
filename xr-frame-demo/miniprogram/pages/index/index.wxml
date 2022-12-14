@@ -1,0 +1,5 @@
+<!--index.wxml-->
+sdf
+<view class="full-screen">
+  <xr-frame />
+</view>
