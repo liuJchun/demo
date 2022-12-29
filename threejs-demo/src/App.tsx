@@ -24,9 +24,9 @@ function App() {
         <div className="App">
             <div className="container">
                 <div className="content">
-                    {urls.map(item => {
+                    {urls.map((item, index, arr) => {
                         return (
-                            <div className="content-item" key={item}>
+                            <div className="content-item" key={item + arr.length}>
                                 <AutoResizeGlb url={item} />
                             </div>
                         )
