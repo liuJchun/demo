@@ -1,34 +1,39 @@
-#root {
-    /* max-width: 1280px;
-    margin: 0 auto;
-    padding: 2rem;
-    text-align: center; */
-}
-
-@keyframes logo-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-    a:nth-of-type(2) .logo {
-        animation: logo-spin infinite 20s linear;
-    }
-}
-
-.card {
-    padding: 2em;
-}
-
-.read-the-docs {
-    color: #888;
+* {
+    box-sizing: border-box;
 }
 
 .App {
     width: 100vw;
     height: 100vh;
+}
+
+.container {
+    display: flex;
+}
+
+.content {
+    height: 100vh;
+    flex-grow: 1;
+    display: inline-flex;
+    overflow-x: scroll;
+    padding-bottom: 20px;
+}
+
+.content-item {
+    /* max-width: 100%; */
+    flex-grow: 1;
+    /* max-width: 100%; */
+    min-width: 400px;
+    height: 100%;
+}
+
+.operate {
+    width: 100px;
+    height: 100vh;
+    cursor: pointer;
+    padding: 200px 20px;
+}
+
+.operate-item + .operate-item {
+    margin-top: 50px;
 }

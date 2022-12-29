@@ -1,0 +1,46 @@
+{
+  "keyframe": {
+    "plane": {
+      "0": {
+        "rotation.y": 0,
+        "material.u_baseColorFactor": [0.2, 0.6, 0.8, 1]
+      },
+      "50": {
+        "material.u_baseColorFactor": [0.2, 0.8, 0.6, 1]
+      },
+      "100": {
+        "rotation.y": 6.28,
+        "material.u_baseColorFactor": [0.2, 0.6, 0.8, 1]
+      }
+    },
+    "cube": {
+      "0": {
+        "position": [-1, 0, 0]
+      },
+      "25": {
+        "position": [-1, 1, 0]
+      },
+      "50": {
+        "position": [1, 1, 0]
+      },
+      "75": {
+        "position": [1, 0, 0]
+      }
+    }
+  },
+  "animation": {
+    "plane": {
+      "keyframe": "plane",
+      "duration": 4,
+      "ease": "ease-in-out",
+      "loop": -1
+    },
+    "cube": {
+      "keyframe": "cube",
+      "duration": 4,
+      "ease": "steps",
+      "loop": -1,
+      "direction": "both"
+    }
+  }
+}
