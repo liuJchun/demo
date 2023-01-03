@@ -11,7 +11,7 @@
 
   <xr-node wx:if="{{loaded}}">
     <xr-ar-tracker
-      mode="Marker" bind:ar-tracker-switch="handleTrackerSwitch"
+      mode="Marker" id="tracker" bind:ar-tracker-switch="handleTrackerSwitch"
       src="https://mmbizwxaminiprogram-1258344707.cos.ap-guangzhou.myqcloud.com/xr-frame/demo/xr-frame-team/2dmarker/hikari.jpg"
     >
       <xr-mesh node-id="mesh-plane" geometry="plane" material="mat" />
