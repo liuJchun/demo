@@ -62,26 +62,30 @@
     可能需要视情况调整 shadow-distance 来避免阴影投影过大或者过小。
     适当调整 shadow-bias 来防止自阴影。
 
-    ```xml
-    <xr-scene ar-system="modes:Marker">
-        <!-- 给plane这个xr-mesh开启了receive-shadow去接收阴影，然后开启了xr-gltf的cast-shadow来产生阴影，最后开启了主光源的cast-shadow总开关允许灯光产生阴影。 -->
-        <xr-mesh node-id="plane" position="0 -0.4 0" scale="5 0.2 5" geometry="cube"  uniforms="u_baseColorFactor:0.48 0.78 0.64 1" receive-shadow
+```html
+<xr-scene ar-system="modes:Marker">
+    <!-- 给plane这个xr-mesh开启了receive-shadow去接收阴影，然后开启了xr-gltf的cast-shadow来产生阴影，最后开启了主光源的cast-shadow总开关允许灯光产生阴影。 -->
+    <xr-mesh
+        node-id="plane"
+        position="0 -0.4 0"
+        scale="5 0.2 5"
+        geometry="cube"
+        uniforms="u_baseColorFactor:0.48 0.78 0.64 1"
+        receive-shadow
     />
-        <xr-gltf model="test-gltf" cast-shadow/>
-        <xr-camera
-        position="3 3 3" target="plane"
-        />
-        <xr-light type="directional" rotation="60 0 0" color="1 1 1" intensity="2.5" cast-shadow />
-    </xr-scene>
-    ```
+    <xr-gltf model="test-gltf" cast-shadow />
+    <xr-camera position="3 3 3" target="plane" />
+    <xr-light type="directional" rotation="60 0 0" color="1 1 1" intensity="2.5" cast-shadow />
+</xr-scene>
+```
 
 -   除了以上的基本使用，xr-frame 原生提供了 ar 追踪器，可以直接实现我们之前 kivicube-scene 插件的功能
 
-    ```html
-    <xr-ar-tracker mode="Marker" src="/assets/2d-marker.png">
-        <xr-gltf model="gltf-damageHelmet"></xr-gltf>
-    </xr-ar-tracker>
-    ```
+```html
+<xr-ar-tracker mode="Marker" src="/assets/2d-marker.png">
+    <xr-gltf model="gltf-damageHelmet"></xr-gltf>
+</xr-ar-tracker>
+```
 
 ### 渲染
 
@@ -109,69 +113,69 @@
 
 -   gltf
 
-    GLTF 是一种被广泛使用的文件格式，用来储存 3D 模型和 3D 场景。在 xr-frame 里你可以非常轻松地引入任意 GLTF 模型，并将其渲染出来。
+GLTF 是一种被广泛使用的文件格式，用来储存 3D 模型和 3D 场景。在 xr-frame 里你可以非常轻松地引入任意 GLTF 模型，并将其渲染出来。
 
-    ```html
-    <xr-asset-load type="gltf" asset-id="gltfModel" src="/assets/xxx.gltf" />
-    <!-- xr-gltf标签对应的元素为Shadow元素，所以请不要在xml里为xr-gltf添加子标签。 -->
-    <xr-gltf id="myGLTF" model="gltfModel" anim-autoplay></xr-gltf>
-    ```
+```html
+<xr-asset-load type="gltf" asset-id="gltfModel" src="/assets/xxx.gltf" />
+<!-- xr-gltf标签对应的元素为Shadow元素，所以请不要在xml里为xr-gltf添加子标签。 -->
+<xr-gltf id="myGLTF" model="gltfModel" anim-autoplay></xr-gltf>
+```
 
-    使用 js 来控制 gltf 动画，three 中也是你能通过 js 来控制播放动画，且要借助 animationMixer，相对而言 使用 xr-frame 来描述模型动画就要简短很多。
+使用 js 来控制 gltf 动画，three 中也是你能通过 js 来控制播放动画，且要借助 animationMixer，相对而言 使用 xr-frame 来描述模型动画就要简短很多。
 
-    ```xml
-        <xr-gltf id="myGLTF" model="gltfModel" bind:gltf-loaded="handleGLTFLoaded"></xr-gltf>
-    ```
+```html
+<xr-gltf id="myGLTF" model="gltfModel" bind:gltf-loaded="handleGLTFLoaded"></xr-gltf>
+```
 
-    ```javascript
-    function handleGLTFLoaded({ detail }) {
-        const el = detail.value.target
-        const animator = el.getComponent('animator')
-        animator.play('idle')
-    }
-    ```
+```javascript
+function handleGLTFLoaded({ detail }) {
+    const el = detail.value.target
+    const animator = el.getComponent('animator')
+    animator.play('idle')
+}
+```
 
--   ar 系统
+#### ar 系统
 
-        使用 xr-frame 来实现 ar 识别的能力变得更加容易，我们可以看官方给出的示例，其中大多数还是效果比较好的，但有些的表现不是很稳定，也许随着时间官方会解决这些问题。
+使用 xr-frame 来实现 ar 识别的能力变得更加容易，我们可以看官方给出的示例，其中大多数还是效果比较好的，但有些的表现不是很稳定，也许随着时间官方会解决这些问题。
 
-        https://developers.weixin.qq.com/miniprogram/dev/component/xr-frame/overview/#%E7%A4%BA%E4%BE%8B
+https://developers.weixin.qq.com/miniprogram/dev/component/xr-frame/overview/#%E7%A4%BA%E4%BE%8B
 
-        我们更多的是关注 ar 识别的能力，
+我们更多的是关注 ar 识别的能力，
 
-        ```xml
-        <!-- 目前的小程序AI系统限制，modes只能存在一个，不能多种模式同时开启 -->
-        <!-- 前置相机依赖于客户端版本8.0.31 -->
-        <xr-scene ar-system="modes:Plane;camera:Back">
-            // somethings 。。。
-        </xr-scene>
-        ```
+```xml
+<!-- 目前的小程序AI系统限制，modes只能存在一个，不能多种模式同时开启 -->
+<!-- 前置相机依赖于客户端版本8.0.31 -->
+<xr-scene ar-system="modes:Plane;camera:Back">
+    // somethings 。。。
+</xr-scene>
+```
 
-        -   其中2d的 ar 跟踪效果还不错
+-   其中 2d 的 ar 跟踪效果还不错
 
-        ```xml
-            <xr-ar-tracker mode="Marker" src="/assets/2d-marker.png">
-                <xr-gltf model="gltf-damageHelmet"></xr-gltf>
-            </xr-ar-tracker>
-        ```
+```html
+<xr-ar-tracker mode="Marker" src="/assets/2d-marker.png">
+    <xr-gltf model="gltf-damageHelmet"></xr-gltf>
+</xr-ar-tracker>
+```
 
-        其中经过测试有一些问题的（以下都是基于3星手机的测试）：
+其中经过测试有一些问题的（以下都是基于 3 星手机的测试）：
 
-        `卡其逃脱太` 案例：关闭页面还有声音，也许是应用代码的原因。
+`卡其逃脱太` 案例：关闭页面还有声音，也许是应用代码的原因。
 
-        典型案例：`扫描图片视频`（基于 2d marker 实现），扫描出现白色的空白区域，有时候会出现视频
+典型案例：`扫描图片视频`（基于 2d marker 实现），扫描出现白色的空白区域，有时候会出现视频
 
-        `AR OSD Marker` 识别是有一些抖动的
+`AR OSD Marker` 识别是有一些抖动的
 
-        `传送门` 效果不好，反复识别，界面会出现闪烁，有时候效果挺好的
+`传送门` 效果不好，反复识别，界面会出现闪烁，有时候效果挺好的
 
-        `AR 人脸` 识别特征无反应
+`AR 人脸` 识别特征无反应
 
-        其他表现都是比较好的
-        `OSD 扫描物体查看信息` 文字提示，扫描公仔出现提示信息。
+其他表现都是比较好的
+`OSD 扫描物体查看信息` 文字提示，扫描公仔出现提示信息。
 
 -   分享系统
 
-    将 xr-frame 渲染的结果分享给好友是个很常见的需求，所以我们内置了分享系统 ShareSystem 来协助开发者快速截屏分享。
+将 xr-frame 渲染的结果分享给好友是个很常见的需求，所以我们内置了分享系统 ShareSystem 来协助开发者快速截屏分享。
 
-    类似快照截图的功能，`kivicube-scene` 使用 `takePhoto` 的 api
+类似快照截图的功能，`kivicube-scene` 使用 `takePhoto` 的 api
