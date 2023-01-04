@@ -1,6 +1,6 @@
 ### 目的：xr-frame 是否适合用于生产环境，和 threejs 的实现有什么不同？
 
-xr-frame 目前处于 beat 版本，设计使用标签的的方式来（ ECS ）描述 threejs 的场景、资源，但是只能使用最新的微信开发版工具和基础库只能使用 2.28 以上的版本，暂时不建议用于生产环境，但微信小程序原生支持 xr-frame 会给我们带来：
+    xr-frame 目前处于 beat 版本，设计使用标签的的方式来（ ECS ）描述 threejs 的场景、资源，但是只能使用最新的微信开发版工具和基础库只能使用 2.28 以上的版本，暂时不建议用于生产环境，但微信小程序原生支持 xr-frame 会给我们带来：
 
 -   优势：
 
@@ -24,9 +24,9 @@ xr-frame 目前处于 beat 版本，设计使用标签的的方式来（ ECS ）
 
     xr-frame 允许开发者定制资源加载器，来添加自己所需的资源类型。所有的资源加载器都需要派生自 AssetLoader 类，然后使用上一章的方法在 xml 中或者手动使用。
 
-https://developers.weixin.qq.com/miniprogram/dev/component/xr-frame/assets/loader.html
+    https://developers.weixin.qq.com/miniprogram/dev/component/xr-frame/assets/loader.html
 
-不同的是，xr-frame 有 weight 属性
+    不同的是，xr-frame 有 weight 属性
 
     ```xml
 
@@ -133,11 +133,42 @@ https://developers.weixin.qq.com/miniprogram/dev/component/xr-frame/assets/loade
 
 -   ar 系统
 
-    使用 xr-frame 来实现 ar 识别的能力变得更加容易
+        使用 xr-frame 来实现 ar 识别的能力变得更加容易，我们可以看官方给出的示例，其中大多数还是效果比较好的，但有些的表现不是很稳定，也许随着时间官方会解决这些问题。
 
-    ```xml
-    <xr-scene ar-system="modes:Plane;camera:Back"></xr-scene>
-    ```
+        https://developers.weixin.qq.com/miniprogram/dev/component/xr-frame/overview/#%E7%A4%BA%E4%BE%8B
+
+        我们更多的是关注 ar 识别的能力，
+
+        ```xml
+        <!-- 目前的小程序AI系统限制，modes只能存在一个，不能多种模式同时开启 -->
+        <!-- 前置相机依赖于客户端版本8.0.31 -->
+        <xr-scene ar-system="modes:Plane;camera:Back">
+            // somethings 。。。
+        </xr-scene>
+        ```
+
+        -   其中2d的 ar 跟踪效果还不错
+
+        ```xml
+            <xr-ar-tracker mode="Marker" src="/assets/2d-marker.png">
+                <xr-gltf model="gltf-damageHelmet"></xr-gltf>
+            </xr-ar-tracker>
+        ```
+
+        其中经过测试有一些问题的（以下都是基于3星手机的测试）：
+
+        `卡其逃脱太` 案例：关闭页面还有声音，也许是应用代码的原因。
+
+        典型案例：`扫描图片视频`（基于 2d marker 实现），扫描出现白色的空白区域，有时候会出现视频
+
+        `AR OSD Marker` 识别是有一些抖动的
+
+        `传送门` 效果不好，反复识别，界面会出现闪烁，有时候效果挺好的
+
+        `AR 人脸` 识别特征无反应
+
+        其他表现都是比较好的
+        `OSD 扫描物体查看信息` 文字提示，扫描公仔出现提示信息。
 
 -   分享系统
 
