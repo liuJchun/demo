@@ -1,0 +1,7 @@
+{
+    "component": true,
+    "usingComponents": {
+        "model": "../../components/model/index",
+        "loading": "../../components/loading/index"
+    }
+}

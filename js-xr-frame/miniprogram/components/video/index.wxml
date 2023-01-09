@@ -1,0 +1,27 @@
+<xr-scene ar-system="modes:Marker" bind:ready="handleReady">
+  <xr-assets bind:loaded="handleAssetsLoaded">
+    <xr-asset-load type="texture" asset-id="point" src="https://mmbizwxaminiprogram-1258344707.cos.ap-guangzhou.myqcloud.com/xr-frame/demo/particles/point.png" />
+    <xr-asset-load
+      type="video-texture" asset-id="hikari" options="loop:true"
+      src="https://mmbizwxaminiprogram-1258344707.cos.ap-guangzhou.myqcloud.com/xr-frame/demo/xr-frame-team/2dmarker/hikari-v.mp4"
+    />
+    <xr-asset-material asset-id="mat" effect="simple" uniforms="u_baseColorMap: video-hikari" />
+  </xr-assets>
+  <xr-node wx:if="{{loaded}}">
+    <xr-ar-tracker
+      mode="Marker" id="tracker" bind:ar-tracker-switch="handleTrackerSwitch"
+      src="https://mmbizwxaminiprogram-1258344707.cos.ap-guangzhou.myqcloud.com/xr-frame/demo/xr-frame-team/2dmarker/hikari.jpg"
+    >
+      <xr-mesh node-id="mesh-plane" geometry="plane" material="mat" />
+      <xr-particle
+        capacity="500" emit-rate="20"
+        size="0.03 0.06" life-time="2 3" speed="0.04 0.1"
+        start-color="1 1 1 0.8" end-color="1 1 1 0.2"
+        emitter-type="BoxShape"
+        emitter-props="minEmitBox:-0.5 0 0.5,maxEmitBox:0.5 0.2 0,direction:0 0 -1,direction2:0 0 -1"
+        texture="point"
+      />
+    </xr-ar-tracker>
+  </xr-node>
+  <xr-camera clear-color="0.4 0.8 0.6 1" background="ar" is-ar-camera />
+</xr-scene>

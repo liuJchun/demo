@@ -1,7 +1,0 @@
-{
-  "usingComponents": {
-    "xr-start": "../../components/xr-start/xr-start",
-    "model": "../../components/model/index",
-    "ar-demo": "../../components/ar-demo/index"
-  }
-}

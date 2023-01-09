@@ -1,0 +1,10 @@
+{
+    "dependencies": {},
+    "scripts": {
+        "cdn": "kivi-cdn upload assets --pure --project demo-assets"
+    },
+    "devDependencies": {
+        "kivi-cdn": "git+ssh://git@gitlab.kivisense.com:30001/developers/kivi-cdn.git#81e3fee7",
+        "eslint": "^8.31.0"
+    }
+}

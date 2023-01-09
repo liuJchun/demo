@@ -1,4 +1,4 @@
-### 目的：xr-frame 是否适合用于生产环境，和 threejs 的实现有什么不同？
+### XR-Frame 调研：xr-frame 是否适合用于生产环境，和 threejs 的实现有什么不同？
 
     xr-frame 目前处于 beat 版本，设计使用标签的的方式来（ ECS ）描述 threejs 的场景、资源，但是只能使用最新的微信开发版工具和基础库只能使用 2.28 以上的版本，暂时不建议用于生产环境，但微信小程序原生支持 xr-frame 会给我们带来：
 
@@ -28,8 +28,7 @@
 
     不同的是，xr-frame 有 weight 属性
 
-    ```xml
-
+    ```html
     <!-- 加载资源/模型都是使用标签加载，前后依赖是有前后顺序的问题。 -->
     <xr-assets bind:progress="handleAssetsProgress" bind:loaded="handleAssetsLoaded">
         <xr-asset-load type="texture" asset-id="waifu" src="/assets/waifu.png" weight="2" />
@@ -55,7 +54,7 @@
     </xr-scene>
     ```
 
-    如何使用阴影
+    如何使用阴影：
 
     当然，在实际使用中会有一些需要关注的地方：
     支持自己给自己投影，可以同时开启产生和接收阴影。
@@ -113,27 +112,27 @@
 
 -   gltf
 
-GLTF 是一种被广泛使用的文件格式，用来储存 3D 模型和 3D 场景。在 xr-frame 里你可以非常轻松地引入任意 GLTF 模型，并将其渲染出来。
+    GLTF 是一种被广泛使用的文件格式，用来储存 3D 模型和 3D 场景。在 xr-frame 里你可以非常轻松地引入任意 GLTF 模型，并将其渲染出来。
 
-```html
-<xr-asset-load type="gltf" asset-id="gltfModel" src="/assets/xxx.gltf" />
-<!-- xr-gltf标签对应的元素为Shadow元素，所以请不要在xml里为xr-gltf添加子标签。 -->
-<xr-gltf id="myGLTF" model="gltfModel" anim-autoplay></xr-gltf>
-```
+    ```html
+    <xr-asset-load type="gltf" asset-id="gltfModel" src="/assets/xxx.gltf" />
+    <!-- xr-gltf标签对应的元素为Shadow元素，所以请不要在xml里为xr-gltf添加子标签。 -->
+    <xr-gltf id="myGLTF" model="gltfModel" anim-autoplay></xr-gltf>
+    ```
 
-使用 js 来控制 gltf 动画，three 中也是你能通过 js 来控制播放动画，且要借助 animationMixer，相对而言 使用 xr-frame 来描述模型动画就要简短很多。
+    使用 js 来控制 gltf 动画，three 中也是你能通过 js 来控制播放动画，且要借助 animationMixer，相对而言 使用 xr-frame 来描述模型动画就要简短很多。
 
-```html
-<xr-gltf id="myGLTF" model="gltfModel" bind:gltf-loaded="handleGLTFLoaded"></xr-gltf>
-```
+    ```html
+    <xr-gltf id="myGLTF" model="gltfModel" bind:gltf-loaded="handleGLTFLoaded"></xr-gltf>
+    ```
 
-```javascript
-function handleGLTFLoaded({ detail }) {
-    const el = detail.value.target
-    const animator = el.getComponent('animator')
-    animator.play('idle')
-}
-```
+    ```javascript
+    function handleGLTFLoaded({ detail }) {
+        const el = detail.value.target
+        const animator = el.getComponent('animator')
+        animator.play('idle')
+    }
+    ```
 
 #### ar 系统
 
@@ -159,7 +158,7 @@ https://developers.weixin.qq.com/miniprogram/dev/component/xr-frame/overview/#%E
 </xr-ar-tracker>
 ```
 
-其中经过测试有一些问题的（以下都是基于 3 星手机的测试）：
+其中经过测试有一些问题的（以下都是基于三星手机的测试）：
 
 `卡其逃脱太` 案例：关闭页面还有声音，也许是应用代码的原因。
 

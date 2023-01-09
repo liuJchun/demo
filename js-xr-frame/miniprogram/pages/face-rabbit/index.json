@@ -1,0 +1,5 @@
+{
+  "usingComponents": {
+    "ar-rabbit": "../../components/ar-rabbit/index"
+  }
+}
