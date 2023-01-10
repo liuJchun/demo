@@ -1,9 +1,0 @@
-<view class="" hover-class="none" hover-stop-propagation="false">
-    <loading wx:if="{{showLoading}}" progress="{{progress}}"/>
-    <model 
-    width="100vw"
-    height="100vh"
-    style="width:100vw;height:100vh;" bind:onProgress="handleOnProgress" bind:onLoaded="handleOnLoaded" />
-</view>
-
-

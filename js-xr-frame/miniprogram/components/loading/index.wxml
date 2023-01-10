@@ -1,8 +1,0 @@
-<!--components/loading/index.wxml-->
-
-<view class="loading-container" hover-class="none" hover-stop-propagation="false">
-    <text>加载{{progress}}%</text>
-</view>
-
-
-
